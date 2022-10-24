@@ -23,25 +23,37 @@ public class ProducerController {
     @GetMapping
     public String producer(){
 
-        for(int i=1; i<=21; i++ ){
+        for(long i=1; i<=1000; i++){
             Random random = new Random();
-            int number = random.nextInt(200 - 1) + 1;
-            kafkaTemplate.send("aster", String.valueOf(number));
-            log.info("Want " + number + "nth Prime");
+            long number = random.nextLong(200 - 1) + 1;
+            log.info("Number: {}", number);
 
-            if((i % 5) == 0){
-                try{
-                    Thread.sleep(2000);
-                }
-                catch (Exception e){}
+            if(number/2 == 0){
+                kafkaTemplate.send("even", String.valueOf(number));
+                log.info("Want " + number + "nth Prime");
+            }
+            else {
+                kafkaTemplate.send("odd", String.valueOf(number));
+                log.info("Want " + number + "nth Prime");
             }
         }
 
         return "Message published...";
     }
 
-    @KafkaListener(topics = "aster", groupId = "groupId")
-    public void consumer(@Payload String payload, Acknowledgment acknowledgment){
+    @KafkaListener(topics = "even", groupId = "groupId")
+    public void consumeEven(@Payload String payload, Acknowledgment acknowledgment){
+
+        int number = getNthPrime(Integer.parseInt(payload));
+
+        if(number != 0){
+            log.info(payload + "nth Prime = " + number);
+            acknowledgment.acknowledge();
+        }
+    }
+
+    @KafkaListener(topics = "odd", groupId = "groupId")
+    public void consumerOdd(@Payload String payload, Acknowledgment acknowledgment){
 
         int number = getNthPrime(Integer.parseInt(payload));
 

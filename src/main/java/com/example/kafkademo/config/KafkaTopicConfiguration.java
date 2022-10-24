@@ -13,4 +13,17 @@ public class KafkaTopicConfiguration {
 
         return TopicBuilder.name("aster").build();
     }
+
+    @Bean
+    public NewTopic topicConfigurationEven(){
+
+        return TopicBuilder.name("even").build();
+    }
+
+    @Bean
+    public NewTopic topicConfigurationOdd(){
+
+        return TopicBuilder.name("odd").build();
+    }
+
 }
