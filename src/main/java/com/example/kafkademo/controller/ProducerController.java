@@ -1,6 +1,7 @@
 package com.example.kafkademo.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,10 +16,10 @@ import java.util.Random;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProducerController {
 
-    private final KafkaTemplate<String , String> kafkaTemplate;
+    private final KafkaTemplate<String , Object> kafkaTemplate;
 
     @GetMapping
     public String producer(){
