@@ -1,7 +1,7 @@
 package com.example.kafkademo.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ProducerController {
 
-    private final KafkaTemplate<String , String> kafkaTemplate;
-
-    @Autowired
-    public ProducerController(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    private final KafkaTemplate<String , Object> kafkaTemplate;
 
     @GetMapping
     public String producer(){
@@ -30,7 +26,7 @@ public class ProducerController {
         return "Message published...";
     }
 
-    @KafkaListener(topics = "aster", groupId = "groupId")
+    @KafkaListener(topics = "aster", groupId = "email")
     public void consumer(String data){
 
         System.out.println(data + " ......... ");
